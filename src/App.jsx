@@ -1,29 +1,18 @@
-import React, { useState } from 'react'
+import React from 'react'
+import Navbar from './components/Navbar'
+import UploadBook from './components/UploadBook'
+import { Toaster } from "react-hot-toast"
 
 const App = () => {
-
-  const [person, setPerson] = useState()
-
-  const fetchData = async () => {
-    const res = await fetch("http://localhost:3000", {
-      method: "GET"
-    })
-    const data = await res.json()
-
-    setPerson(data)
-  }
-
   return (
-    <div>
+    <main>
 
-      <button onClick={() => {
-        fetchData()
-      }}>CLick</button>
+      <Toaster/>
+      
+      <Navbar />
 
-      {
-        person && <h1>{person.name}</h1>
-      }
-    </div>
+      <UploadBook />
+    </main>
   )
 }
 
