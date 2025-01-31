@@ -7,7 +7,7 @@ import toast from 'react-hot-toast'
 
 const UploadBook = () => {
 
-    const { handleSubmit, formState: { errors }, register } = useForm({
+    const { handleSubmit, formState: { errors }, register, reset } = useForm({
         resolver: yupResolver(bookSchema)
     })
 
@@ -27,6 +27,8 @@ const UploadBook = () => {
             toast.success(response.message)
 
         }
+
+        reset()
     }
 
     return (
