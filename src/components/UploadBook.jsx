@@ -2,8 +2,8 @@ import React from 'react'
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { bookSchema } from '../util/bookSchema'
-import { createBook } from '../apis/book'
 import toast from 'react-hot-toast'
+import { useCreateBook } from '../react-query/book'
 
 const UploadBook = () => {
 
@@ -11,25 +11,12 @@ const UploadBook = () => {
         resolver: yupResolver(bookSchema)
     })
 
-    const onSubmit = async (data) => {
+    const { mutate: uploadBook, isPending } = useCreateBook()
 
-        const { name, release, author, price } = data
-        const response = await createBook({
-            name,
-            release,
-            author,
-            price: parseFloat(price)
-        })
-
-        if (response.isErr) {
-            toast.error(response.message)
-        } else {
-            toast.success(response.message)
-
-        }
-
-        reset()
+    const onSubmit = (data) => {
+        uploadBook(data)
     }
+
 
     return (
         <div className="grid-cols-12 grid mt-10">
@@ -67,7 +54,11 @@ const UploadBook = () => {
                     {errors.price && <div className='text-error'>{errors.price.message}</div>}
 
                 </div>
-                <button type='submit' className="btn btn-primary btn-lg mt-5">Add Book</button>
+                <button type='submit' className="btn btn-primary btn-lg mt-5">
+                    {
+                        isPending ? "Loading..." : "Submit"
+                    }
+                </button>
             </form>
         </div>
     )
